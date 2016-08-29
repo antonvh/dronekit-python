@@ -40,7 +40,7 @@ import platform
 import re
 from dronekit.util import errprinter
 from pymavlink import mavutil, mavwp
-from Queue import Queue, Empty
+from queue import Queue, Empty
 from threading import Thread
 import types
 import threading
@@ -1207,7 +1207,7 @@ class Vehicle(HasObservers):
         @self.on_message(['HOME_POSITION'])
         def listener(self, name, msg):
             self._home_location = LocationGlobal(msg.latitude/1.0e7, msg.longitude/1.0e7, msg.altitude/1000.0);
-            
+
         @self.on_message(['WAYPOINT', 'MISSION_ITEM'])
         def listener(self, name, msg):
             if not self._wp_loaded:
@@ -1529,10 +1529,10 @@ class Vehicle(HasObservers):
         return mavutil.mode_mapping_bynumber(self._vehicle_type)
 
     def _is_mode_available(self, custommode_code, basemode_code=0):
-        try:                       
-            if self._autopilot_type == mavutil.mavlink.MAV_AUTOPILOT_PX4:                
+        try:
+            if self._autopilot_type == mavutil.mavlink.MAV_AUTOPILOT_PX4:
                 mode = mavutil.interpret_px4_mode(basemode_code, custommode_code)
-                return mode in self._mode_mapping                
+                return mode in self._mode_mapping
             return custommode_code in self._mode_mapping_bynumber
         except:
             return False
@@ -1552,7 +1552,7 @@ class Vehicle(HasObservers):
 
     @mode.setter
     def mode(self, v):
-        if self._autopilot_type == mavutil.mavlink.MAV_AUTOPILOT_PX4: 
+        if self._autopilot_type == mavutil.mavlink.MAV_AUTOPILOT_PX4:
             self._master.set_mode(v.name)
         else:
             self._master.set_mode(self._mode_mapping[v.name])
